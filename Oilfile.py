@@ -13,10 +13,26 @@ else:
 from google.cloud import storage
 client = storage.Client()
 bucket = client.get_bucket('oiltrade')
-# Then do other things...
+# Get the complete ticker list
 blob = bucket.get_blob('all_alligator.csv')
 content = blob.download_as_string()
 inMemoryFile = StringIO.StringIO()
 inMemoryFile.write(content)
 #When you buffer, the "cursor" is at the end, and when you read it, the starting position is at the end and it will not pick up anything
 inMemoryFile.seek(0)
+df=pd.read_csv(inMemoryFile, low_memory=False)
+# Append debt levels to the ticker list
+blob = bucket.get_blob('oil_debtload.csv')
+content = blob.download_as_string()
+inMemoryFile = StringIO.StringIO()
+inMemoryFile.write(content)
+#When you buffer, the "cursor" is at the end, and when you read it, the starting position is at the end and it will not pick up anything
+inMemoryFile.seek(0)
+df2=pd.read_csv(inMemoryFile, low_memory=False)
+
+#Append the files together
+
+
+
+
+
