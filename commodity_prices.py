@@ -22,26 +22,27 @@ else:
 #############
 quandl.ApiConfig.api_key = 'BVno6pBYgcEvZJ6uctTr'
 ####################
-#Get the Quandl Data
+#Get the Quandl Data and build two files
+#File 1 : all prices
+#File 2 : the price changes over time - determine what commodity is cyclical
 ###################
 
-rice = quandl.get("COM/RICE_2")
-rice.columns=['rice']
-rice['ind']=rice.index 
-paladium = quandl.get("COM/PA_EFP")
-paladium.columns=['paladium']
-paladium['ind']=paladium.index 
-platinum = quandl.get("COM/PL_EFP")
-platinum.columns=['platinum']
-platinum['ind']=platinum.index     
-coffee = quandl.get("COM/COFFEE_BRZL")
-coffee.columns=['coffee']
-coffee['ind']=coffee.index         
-        
-df1=paladium.merge(rice, on='ind', how='outer')
-df2=df1.merge(platinum, on='ind', how='outer')
-df3=df2.merge(coffee, on='ind', how='outer')
+comlist=[['rice','COM/RICE_2'],
+['paladium','COM/PA_EFP'],
+['platinum','COM/PL_EFP']]
 
-test=df3.sort_values('ind')
-print rice
-print test
+comprices = pd.DataFrame()
+compriceslast = pd.DataFrame()
+
+for i in comlist:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    flag= quandl.get(value)
+    flag.columns=['price']
+    flag['commodity']=commodity
+    flag['lag52'] = flag['price'].shift(52)
+    lastrow=flag.tail(1)
+    #All commodity prices
+    comprices = comprices.append(flag, ignore_index=False)
+    compriceslast = compriceslast.append(lastrow, ignore_index=False)
+    print compriceslast
