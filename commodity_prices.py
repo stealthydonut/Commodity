@@ -29,7 +29,29 @@ quandl.ApiConfig.api_key = 'BVno6pBYgcEvZJ6uctTr'
 
 comlist=[['rice','COM/RICE_2'],
 ['paladium','COM/PA_EFP'],
-['platinum','COM/PL_EFP']]
+['platinum','COM/PL_EFP'],
+['gold','COM/AU_LPM'],
+['coffee','COM/COFFEE_BRZL'],
+['cotton','COM/COTTON'],
+['silver lmba','COM/AG_USD'],
+['cocoa','COM/COCOA'],
+['hogs iowa','COM/HOGS'],
+['us fed funds rate','COM/FEDFU'],
+['copper commex','COM/COPPER'],
+['aluminum','COM/AL_LME'],
+['fertilizers index','COM/WLD_IFERTILIZERS'],
+['iron ore','COM/WLD_IRON_ORE'],
+['potash','COM/WLD_POTASH'],
+['phosphate','COM/WLD_PHOSROCK'],
+['banana','COM/WLD_BANANA_US'],
+['beef','COM/WLD_BEEF'],
+['chicken','COM/WLD_CHICKEN'],
+['orange','COM/WLD_ORANGE'],
+['wheat','COM/WLD_WHEAT_US_SRW'],
+['soybeanns','COM/WLD_SOYBEANS'],
+['natural gas','COM/WLD_NGAS_US'],
+['oil','COM/WLD_CRUDE_BRENT']]
+
 
 comprices = pd.DataFrame()
 compriceslast = pd.DataFrame()
