@@ -34,15 +34,26 @@ comlist=[['rice','COM/RICE_2'],
 comprices = pd.DataFrame()
 compriceslast = pd.DataFrame()
 
+comprices = pd.DataFrame()
+compriceslast = pd.DataFrame()
+
 for i in comlist:
     commodity=''.join(i[0]) 
     value=''.join(i[1]) 
-    flag= quandl.get(value)
-    flag.columns=['price']
-    flag['commodity']=commodity
-    flag['lag52'] = flag['price'].shift(52)
-    lastrow=flag.tail(1)
+    df= quandl.get(value)
+    df.columns=['price']
+    df['commodity']=commodity
+    #Generate the calculations
+    df['lag125'] = df['price'].shift(125)
+    df['lag250'] = df['price'].shift(250)
+    df['lag500'] = df['price'].shift(500)
+    df['lag750'] = df['price'].shift(750)
+    df['lag1000'] = df['price'].shift(1000)
+    df['lag1250'] = df['price'].shift(1250)
+    df['lag1500'] = df['price'].shift(1500)
+    df['max'] = df['price'].max()
+    df['min'] = df['price'].min()
+    lastrow=df.tail(1)
     #All commodity prices
-    comprices = comprices.append(flag, ignore_index=False)
+    comprices = comprices.append(df, ignore_index=False)
     compriceslast = compriceslast.append(lastrow, ignore_index=False)
-    print compriceslast
