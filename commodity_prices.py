@@ -36,7 +36,6 @@ compriceslast = pd.DataFrame()
 
 comprices = pd.DataFrame()
 compriceslast = pd.DataFrame()
-
 for i in comlist:
     commodity=''.join(i[0]) 
     value=''.join(i[1]) 
@@ -51,9 +50,30 @@ for i in comlist:
     df['lag1000'] = df['price'].shift(1000)
     df['lag1250'] = df['price'].shift(1250)
     df['lag1500'] = df['price'].shift(1500)
-    df['max'] = df['price'].max()
-    df['min'] = df['price'].min()
-    lastrow=df.tail(1)
+    df['maxalltime'] = df['price'].max()
+    df['minalltime'] = df['price'].min()
+    #do the five year max and min
+    lastrow1250=df.tail(1250)
+    lastrow1250['max5year'] = lastrow1250['price'].max()
+    lastrow1250['min5year'] = lastrow1250['price'].min()    
+    #do the three year max and min
+    lastrow750=lastrow1250.tail(750)
+    lastrow750['max3year'] = lastrow750['price'].max()
+    lastrow750['min3year'] = lastrow750['price'].min()
+    #Gets the final row of data
+    lastrow=lastrow750.tail(1)
+    #Calculate percentages
+    lastrow['6mochange']=(lastrow['price']/lastrow['lag125'])-1
+    lastrow['1yrchange']=(lastrow['price']/lastrow['lag250'])-1
+    lastrow['2yrchange']=(lastrow['price']/lastrow['lag500'])-1
+    lastrow['3yrchange']=(lastrow['price']/lastrow['lag750'])-1
+    lastrow['4yrchange']=(lastrow['price']/lastrow['lag1000'])-1
+    lastrow['5yrchange']=(lastrow['price']/lastrow['lag1250'])-1
+    lastrow['5yrmaxdiff']=(lastrow['price']/lastrow['max5year'])-1 
+    lastrow['5yrmindiff']=(lastrow['price']/lastrow['min5year'])-1 
+    lastrow['3yrmaxdiff']=(lastrow['price']/lastrow['max3year'])-1     
+    lastrow['3yrmindiff']=(lastrow['price']/lastrow['min3year'])-1 
     #All commodity prices
-    comprices = comprices.append(df, ignore_index=False)
+    #comprices = comprices.append(df, ignore_index=False)
     compriceslast = compriceslast.append(lastrow, ignore_index=False)
+ 
