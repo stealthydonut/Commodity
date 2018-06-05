@@ -99,3 +99,6 @@ for i in comlist:
     #comprices = comprices.append(df, ignore_index=False)
     compriceslast = compriceslast.append(lastrow, ignore_index=False)
  
+
+    
+compriceslast.to_csv('Desktop\comm.csv')
