@@ -21,19 +21,14 @@ else:
 #Quandl Data
 #############
 quandl.ApiConfig.api_key = 'BVno6pBYgcEvZJ6uctTr'
-####################
-#Get the Quandl Data and build two files
-#File 1 : all prices
-#File 2 : the price changes over time - determine what commodity is cyclical
-###################
 
-comlist=[['rice','COM/RICE_2'],
-['paladium','COM/PA_EFP'],
-['platinum','COM/PL_EFP'],
-['gold','COM/AU_LPM'],
+####################################################
+#Stage 1 - Build the list that will acquire the data
+####################################################
+
+wikicomlist=[['rice','COM/RICE_2'],
 ['coffee','COM/COFFEE_BRZL'],
 ['cotton','COM/COTTON'],
-['silver lmba','COM/AG_USD'],
 ['cocoa','COM/COCOA'],
 ['hogs iowa','COM/HOGS'],
 ['us fed funds rate','COM/FEDFU'],
@@ -52,18 +47,80 @@ comlist=[['rice','COM/RICE_2'],
 ['natural gas','COM/WLD_NGAS_US'],
 ['oil','COM/WLD_CRUDE_BRENT']]
 
+lmbacomlist=[['platinum','LPPM/PLAT'],['gold','LBMA/GOLD'],['paladium','LPPM/PALL']]
 
-comprices = pd.DataFrame()
-compriceslast = pd.DataFrame()
+lmbacomlist1=[['silver','LBMA/SILVER']]
 
-comprices = pd.DataFrame()
-compriceslast = pd.DataFrame()
-for i in comlist:
+############################################################
+#Stage 2 - Normalize the data so there is a consistent price
+############################################################
+
+dfwikiraw = pd.DataFrame()
+dflmbaraw = pd.DataFrame()
+dflmbaraw1 = pd.DataFrame()
+
+#Wiki prices
+for i in wikicomlist:
     commodity=''.join(i[0]) 
     value=''.join(i[1]) 
-    df= quandl.get(value)
-    df.columns=['price']
-    df['commodity']=commodity
+    dfwiki= quandl.get(value)
+    dfwiki.columns=['price']
+    dfwiki['commodity']=commodity
+    dfwiki['ind']=dfwiki.index
+    dfwikiraw = dfwikiraw.append(dfwiki, ignore_index=False)
+
+#lmba prices    
+for i in lmbacomlist:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dflmba= quandl.get(value)
+    dflmba.columns=['price','EUR AM','GBP AM','USD PM','EUR PM','GBP PM']
+    dflmba['commodity']=commodity
+    dflmba.__delitem__('EUR AM')
+    dflmba.__delitem__('GBP AM')
+    dflmba.__delitem__('USD PM')
+    dflmba.__delitem__('EUR PM')
+    dflmba.__delitem__('GBP PM') 
+    dflmba['ind']=dflmba.index
+    dflmbaraw = dflmbaraw.append(dflmba, ignore_index=False)
+
+for i in lmbacomlist1:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dflmba= quandl.get(value)
+    dflmba.columns=['price','EUR AM','GBP AM',]
+    dflmba['commodity']=commodity
+    dflmba.__delitem__('EUR AM')
+    dflmba.__delitem__('GBP AM')
+    dflmba['ind']=dflmba.index
+    dflmbaraw1 = dflmbaraw1.append(dflmba, ignore_index=False)
+
+#append all the data together into one file
+
+lmba=dflmbaraw.append(dflmbaraw1, ignore_index=True)
+commodityraw=lmba.append(dfwikiraw, ignore_index=True)
+
+#########################################################################
+#Stage 3 - Iterate through the commodity to build the analytical data set
+#########################################################################
+
+#Create a list from a pandas dataframe variable
+
+com_list=commodityraw.drop_duplicates(['commodity'], keep='last')
+dflist = com_list['commodity'].tolist()
+
+#sort by variable and date
+com_list2=com_list.sort_values(['commodity','ind'])
+
+#Generate the Analytical File
+comprices = pd.DataFrame()
+compriceslast = pd.DataFrame()
+    
+
+for i in dflist:  
+    com_name=''.join(i) 
+    #only include the current commodity 
+    df = commodityraw[commodityraw['commodity']==com_name]            
     #Generate the calculations
     df['lag125'] = df['price'].shift(125)
     df['lag250'] = df['price'].shift(250)
@@ -98,6 +155,8 @@ for i in comlist:
     #All commodity prices
     #comprices = comprices.append(df, ignore_index=False)
     compriceslast = compriceslast.append(lastrow, ignore_index=False)
+ 
+  
  
 
 ##################################
