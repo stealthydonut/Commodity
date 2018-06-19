@@ -100,5 +100,17 @@ for i in comlist:
     compriceslast = compriceslast.append(lastrow, ignore_index=False)
  
 
+##################################
+#Put the dataset back into storage
+##################################
+from google.cloud import storage
+client = storage.Client()
+bucket2 = client.get_bucket('macrofiles')
+df_out = pd.DataFrame(compriceslast)
+df_out.to_csv('commodity_report.csv', index=False)
+blob2 = bucket2.blob('commodity_report.csv')
+blob2.upload_from_filename('commodity_report.csv')
+
+
     
-compriceslast.to_csv('Desktop\comm.csv')
+#compriceslast.to_csv('Desktop\comm.csv')
