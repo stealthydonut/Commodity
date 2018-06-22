@@ -33,15 +33,12 @@ fred = Fred(api_key='4af3776273f66474d57345df390d74b6')
 #############################################
 #corporate bond yields and gold
 #############################################
-
 yield_list=[
 ('2Year Corp Yield','HQMCB2YRP'),
 ('5Year Corp Yield','HQMCB5YRP'),
 ('10Year Corp Yield','HQMCB10YRP'),
 ('30Year Corp Yield','HQMCB30YRP')]
-
 quandl_list=['gold','LBMA/GOLD']
-
 #Get the Fred data
 freddata = pd.DataFrame()
 fredfile = pd.DataFrame()
@@ -54,32 +51,17 @@ for i in yield_list:
     freddata = fred.get_series_all_releases(fredvalue)
     freddata[fredname]=pd.to_numeric(freddata['value'], errors='coerce')
     freddata['ind']=freddata['date']
+    freddata['year'] = freddata['ind'].dt.strftime("%Y")
+    freddata['month'] = freddata['ind'].dt.strftime("%m")
+    #freddata['day'] = freddata['ind'].dt.strftime("%d")
     freddata.__delitem__('value')
     freddata.__delitem__('realtime_start')
     freddata.__delitem__('date')
-    fredfile = pd.merge(fredfile, freddata, left_on='ind', right_on='ind')  
-#Done
-
-
-    
-    
-    
-    
-        freddata['ind']=freddata['date']
-        freddata.__delitem__('value')
-        fredfile = pd.merge(fredfile, freddata, left_on='ind', right_on='ind')        
-    except:
-        print
-
-        bigdata2=pd.merge(all_data_dataset, bigdata, left_on='monthyear', right_on='monthyear')
-        
-        
-com_list=fredfile.drop_duplicates(['variable'], keep='last')
-dflist = com_list['variable'].tolist()
-
-#sort by variable and date
-com_list2=fredfile.sort_values(['variable','ind'])
-
+    freddata.__delitem__('ind')        
+    if fredfile.empty:
+        fredfile = pd.DataFrame(freddata)
+    else:
+        fredfile = pd.merge(fredfile, freddata, how="left", on=['year','month'])  
 
 for i in dflist:  
     com_name=''.join(i) 
