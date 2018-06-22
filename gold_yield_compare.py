@@ -88,7 +88,10 @@ goldmth.__delitem__('price')
 #constuct moving averages to determine if the yield is higher than the gold return over the same period of time
 ###############################################################################################################
 
-com_list2=com_list.sort_values(['commodity','ind'])
+goldmth2=goldmth.sort_values(['year','month'])
+goldmth2['lag6_goldprice'] = goldmth2['goldprice'].shift(6)
+goldmth2['6mthreturn_goldprice'] = goldmth2['goldprice']/goldmth2['lag6_goldprice']-1
+goldmth2['goldpricerMA']=pd.rolling_mean(goldmth2['6mthreturn_goldprice'], 6)
 
 fredfile['lag6_2YearCorpYield'] = fredfile['2YearCorpYield'].shift(6)
 fredfile['6mthreturn_2YearCorpYield'] = fredfile['2YearCorpYield']/fredfile['lag6_2YearCorpYield']-1
@@ -103,10 +106,17 @@ fredfile['lag6_30YearCorpYield'] = fredfile['30YearCorpYield'].shift(6)
 fredfile['6mthreturn_30YearCorpYield'] = fredfile['30YearCorpYield']/fredfile['lag6_30YearCorpYield']-1
 fredfile['30yrMA']=pd.rolling_mean(fredfile['6mthreturn_30YearCorpYield'], 6)
 
-compriceslast = compriceslast.append(lastrow, ignore_index=False)
+goldfile = pd.merge(fredfile, goldmth2, how="left", on=['year','month'])  
 
-###############################################################################################################
-#constuct moving averages to determine if the yield is higher than the gold return over the same period of time
-###############################################################################################################
+##################################
+#Put the dataset back into storage
+##################################
+from google.cloud import storage
+client = storage.Client()
+bucket2 = client.get_bucket('macrofiles')
+df_out = pd.DataFrame(goldfile)
+df_out.to_csv('corpyeild_gold.csv', index=False)
+blob2 = bucket2.blob('corpyeild_gold.csv')
+blob2.upload_from_filename('corpyeild_gold.csv')
 
   
