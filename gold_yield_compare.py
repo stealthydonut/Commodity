@@ -63,45 +63,6 @@ for i in yield_list:
     else:
         fredfile = pd.merge(fredfile, freddata, how="left", on=['year','month'])  
 
-for i in dflist:  
-    com_name=''.join(i) 
-    #only include the current commodity 
-    df = com_list2[com_list2['variable']==com_name]            
-    #Generate the calculations
-    df['lag125'] = df['price'].shift(6)
-    df['lag250'] = df['price'].shift(12)
-    df['lag500'] = df['price'].shift(24)
-    df['lag750'] = df['price'].shift(36)
-    df['lag1000'] = df['price'].shift(48)
-    df['lag1250'] = df['price'].shift(60)
-    df['lag1500'] = df['price'].shift(72)
-    df['maxalltime'] = df['price'].max()
-    df['minalltime'] = df['price'].min()
-    #do the five year max and min
-    lastrow1250=df.tail(1250)
-    lastrow1250['max5year'] = lastrow1250['price'].max()
-    lastrow1250['min5year'] = lastrow1250['price'].min()    
-    #do the three year max and min
-    lastrow750=lastrow1250.tail(750)
-    lastrow750['max3year'] = lastrow750['price'].max()
-    lastrow750['min3year'] = lastrow750['price'].min()
-    #Gets the final row of data
-    lastrow=lastrow750.tail(1)
-    #Calculate percentages
-    lastrow['6mochange']=(lastrow['price']/lastrow['lag125'])-1
-    lastrow['1yrchange']=(lastrow['price']/lastrow['lag250'])-1
-    lastrow['2yrchange']=(lastrow['price']/lastrow['lag500'])-1
-    lastrow['3yrchange']=(lastrow['price']/lastrow['lag750'])-1
-    lastrow['4yrchange']=(lastrow['price']/lastrow['lag1000'])-1
-    lastrow['5yrchange']=(lastrow['price']/lastrow['lag1250'])-1
-    lastrow['5yrmaxdiff']=(lastrow['price']/lastrow['max5year'])-1 
-    lastrow['5yrmindiff']=(lastrow['price']/lastrow['min5year'])-1 
-    lastrow['3yrmaxdiff']=(lastrow['price']/lastrow['max3year'])-1     
-    lastrow['3yrmindiff']=(lastrow['price']/lastrow['min3year'])-1 
-    #All commodity prices
-    #comprices = comprices.append(df, ignore_index=False)
-    compriceslast = compriceslast.append(lastrow, ignore_index=False)
-
 ####################
 #Get the quandl data
 ####################
@@ -114,38 +75,33 @@ df.__delitem__('GBP AM')
 df.__delitem__('USD PM')
 df.__delitem__('EUR PM')
 df.__delitem__('GBP PM') 
-df['ind']=dflmba.index
-df['lag125'] = df['price'].shift(125)
-df['lag250'] = df['price'].shift(250)
-df['lag500'] = df['price'].shift(500)
-df['lag750'] = df['price'].shift(750)
-df['lag1000'] = df['price'].shift(1000)
-df['lag1250'] = df['price'].shift(1250)
-df['lag1500'] = df['price'].shift(1500)
-df['maxalltime'] = df['price'].max()
-df['minalltime'] = df['price'].min()
-#do the five year max and min
-lastrow1250=df.tail(1250)
-lastrow1250['max5year'] = lastrow1250['price'].max()
-lastrow1250['min5year'] = lastrow1250['price'].min()    
-#do the three year max and min
-lastrow750=lastrow1250.tail(750)
-lastrow750['max3year'] = lastrow750['price'].max()
-lastrow750['min3year'] = lastrow750['price'].min()
-#Gets the final row of data
-lastrow=lastrow750.tail(1)
-#Calculate percentages
-lastrow['6mochange']=(lastrow['price']/lastrow['lag125'])-1
-lastrow['1yrchange']=(lastrow['price']/lastrow['lag250'])-1
-lastrow['2yrchange']=(lastrow['price']/lastrow['lag500'])-1
-lastrow['3yrchange']=(lastrow['price']/lastrow['lag750'])-1
-lastrow['4yrchange']=(lastrow['price']/lastrow['lag1000'])-1
-lastrow['5yrchange']=(lastrow['price']/lastrow['lag1250'])-1
-lastrow['5yrmaxdiff']=(lastrow['price']/lastrow['max5year'])-1 
-lastrow['5yrmindiff']=(lastrow['price']/lastrow['min5year'])-1 
-lastrow['3yrmaxdiff']=(lastrow['price']/lastrow['max3year'])-1     
-lastrow['3yrmindiff']=(lastrow['price']/lastrow['min3year'])-1 
+df['ind']=df.index
+df['year'] = df['ind'].dt.strftime("%Y")
+df['month'] = df['ind'].dt.strftime("%m")
+df['day']=1
+goldmth = df.groupby(['month','year'], as_index=False)['price','day'].sum()
+goldmth['goldprice']=goldmth['price']/goldmth['day']
+goldmth.__delitem__('day') 
+goldmth.__delitem__('price') 
 
+###############################################################################################################
+#constuct moving averages to determine if the yield is higher than the gold return over the same period of time
+###############################################################################################################
+
+com_list2=com_list.sort_values(['commodity','ind'])
+
+fredfile['lag6_2YearCorpYield'] = fredfile['2YearCorpYield'].shift(6)
+fredfile['6mthreturn_2YearCorpYield'] = fredfile['2YearCorpYield']/fredfile['lag6_2YearCorpYield']-1
+fredfile['2yrMA']=pd.rolling_mean(fredfile['6mthreturn_2YearCorpYield'], 6)
+fredfile['lag6_5YearCorpYield'] = fredfile['5YearCorpYield'].shift(6)
+fredfile['6mthreturn_5YearCorpYield'] = fredfile['5YearCorpYield']/fredfile['lag6_5YearCorpYield']-1
+fredfile['5yrMA']=pd.rolling_mean(fredfile['6mthreturn_5YearCorpYield'], 6)
+fredfile['lag6_10YearCorpYield'] = fredfile['10YearCorpYield'].shift(6)
+fredfile['6mthreturn_10YearCorpYield'] = fredfile['10YearCorpYield']/fredfile['lag6_10YearCorpYield']-1
+fredfile['10yrMA']=pd.rolling_mean(fredfile['6mthreturn_10YearCorpYield'], 6)
+fredfile['lag6_30YearCorpYield'] = fredfile['30YearCorpYield'].shift(6)
+fredfile['6mthreturn_30YearCorpYield'] = fredfile['30YearCorpYield']/fredfile['lag6_30YearCorpYield']-1
+fredfile['30yrMA']=pd.rolling_mean(fredfile['6mthreturn_30YearCorpYield'], 6)
 
 compriceslast = compriceslast.append(lastrow, ignore_index=False)
 
