@@ -51,6 +51,11 @@ lmbacomlist=[['platinum','LPPM/PLAT'],['gold','LBMA/GOLD'],['paladium','LPPM/PAL
 
 lmbacomlist1=[['silver','LBMA/SILVER']]
 
+JMcomlist=[['JOHNMATT/RHOD','JOHNMATT/IRID','JOHNMATT/RUTH']]
+
+#IRID = iridium
+#RUTH = ruthenium
+
 ############################################################
 #Stage 2 - Normalize the data so there is a consistent price
 ############################################################
