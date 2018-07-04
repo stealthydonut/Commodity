@@ -104,7 +104,7 @@ for i in lmelist1:
     dflme.columns=['price']
     dflme['commodity']=commodity
     dflme['ind']=dflme.index
-    dflmeraw = dflmeraw.append(dflme, ignore_index=False)
+    dflme1raw = dflmeraw.append(dflme, ignore_index=False)
     
 for i in lmelist2:
     commodity=''.join(i[0]) 
@@ -191,7 +191,12 @@ for i in fredlist:
 #append all the data together into one file
 
 lmba=dflmbaraw.append(dflmbaraw1, ignore_index=True)
-commodityraw=lmba.append(dfwikiraw, ignore_index=True)
+file1=lmba.append(dffredraw, ignore_index=True)
+file2=file1.append(dfjmraw, ignore_index=True)
+file3=file2.append(dflme1raw, ignore_index=True)
+file4=file3.append(dflme2raw, ignore_index=True)
+commodityraw=file4.append(dfwikiraw, ignore_index=True)
+
 
 #########################################################################
 #Stage 3 - Iterate through the commodity to build the analytical data set
