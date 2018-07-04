@@ -51,10 +51,30 @@ lmbacomlist=[['platinum','LPPM/PLAT'],['gold','LBMA/GOLD'],['paladium','LPPM/PAL
 
 lmbacomlist1=[['silver','LBMA/SILVER']]
 
-JMcomlist=[['JOHNMATT/RHOD','JOHNMATT/IRID','JOHNMATT/RUTH']]
+JMcomlist=[['rhodenium','JOHNMATT/RHOD'],['iridium','JOHNMATT/IRID'],['ruthenium','JOHNMATT/RUTH']]
 
-#IRID = iridium
-#RUTH = ruthenium
+lmelist=[['cobalt','LME/PR_CO'],
+['molybdenum','LME/PR_MO'],
+['zinc','LME/PR_ZI'],
+['tin','LME/PR_TN'],
+['aluminum','LME/PR_AL'],
+['nickel','LME/PR_NI'],
+['copper','LME/PR_CU']]
+
+fredlist=[['fxusdcad','FRED/DEXCAUS'],
+['fxusdyuan','FRED/DEXCHUS'],
+['fxusdjap','FRED/DEXJPUS'],
+['fxusdind','FRED/DEXINUS'],
+['fxusdbra','FRED/DEXBZUS'],
+['fxusdsko','FRED/DEXKOUS'],
+['fxusdaud','FRED/DEXUSAL'],
+['fxusdmex','FRED/DEXMXUS'],
+['fxusdche','FRED/DEXSZUS'],
+['fxusdeur','FED/RXI_US_N_B_EU']]
+
+corn = quandl.get ("TFGRAIN/CORN") #corn
+soybean = quandl.get ("TFGRAIN/SOYBEANS") #soybean
+oil = quandl.get("OPEC/ORB")
 
 ############################################################
 #Stage 2 - Normalize the data so there is a consistent price
@@ -63,6 +83,10 @@ JMcomlist=[['JOHNMATT/RHOD','JOHNMATT/IRID','JOHNMATT/RUTH']]
 dfwikiraw = pd.DataFrame()
 dflmbaraw = pd.DataFrame()
 dflmbaraw1 = pd.DataFrame()
+dfJMraw = pd.DataFrame()
+dflmeraw = pd.DataFrame()
+
+#lmd prices
 
 #Wiki prices
 for i in wikicomlist:
