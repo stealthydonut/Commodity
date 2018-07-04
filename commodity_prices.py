@@ -105,6 +105,27 @@ for i in lmelist1:
     dflme['commodity']=commodity
     dflme['ind']=dflme.index
     dflmeraw = dflmeraw.append(dflme, ignore_index=False)
+    
+for i in lmelist2:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dflme= quandl.get(value)
+    dflme.columns=['Cash Buyer','Cash Seller & Settlement','3-months Buyer','3-months Seller','15-months Buyer','15-months Seller','Dec 1 Buyer','Dec 1 Seller','Dec 2 Buyer','Dec 2 Seller','Dec 3 Buyer','Dec 3 Seller']
+    dflme.__delitem__('Cash Seller & Settlement')
+    dflme.__delitem__('3-months Buyer')
+    dflme.__delitem__('3-months Seller')
+    dflme.__delitem__('15-months Buyer')
+    dflme.__delitem__('15-months Seller')
+    dflme.__delitem__('Dec 1 Buyer')
+    dflme.__delitem__('Dec 1 Seller')
+    dflme.__delitem__('Dec 2 Buyer')
+    dflme.__delitem__('Dec 2 Seller')
+    dflme.__delitem__('Dec 3 Buyer')    
+    dflme.__delitem__('Dec 3 Seller')        
+    dflme.columns=['price']
+    dflme['commodity']=commodity
+    dflme['ind']=dflme.index
+    dflme2raw = dflme2raw.append(dflme, ignore_index=False)
 
 #Wiki prices
 for i in wikicomlist:
