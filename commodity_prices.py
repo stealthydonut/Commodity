@@ -87,8 +87,24 @@ dflmbaraw1 = pd.DataFrame()
 dfJMraw = pd.DataFrame()
 dffredraw = pd.DataFrame()
 dflmeraw = pd.DataFrame()
+dflme1raw = pd.DataFrame() 
+dflme2raw = pd.DataFrame()
 
-#lmd prices
+#lme prices
+for i in lmelist1:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dflme= quandl.get(value)
+    dflme.columns=['Cash Buyer','Cash Seller & Settlement','3-months Buyer','3-months Seller','15-months Buyer','15-months Seller']
+    dflme.__delitem__('Cash Seller & Settlement')
+    dflme.__delitem__('3-months Buyer')
+    dflme.__delitem__('3-months Seller')
+    dflme.__delitem__('15-months Buyer')
+    dflme.__delitem__('15-months Seller')
+    dflme.columns=['price']
+    dflme['commodity']=commodity
+    dflme['ind']=dflme.index
+    dflmeraw = dflmeraw.append(dflme, ignore_index=False)
 
 #Wiki prices
 for i in wikicomlist:
