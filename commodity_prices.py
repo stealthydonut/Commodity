@@ -53,7 +53,7 @@ lmbacomlist1=[['silver','LBMA/SILVER']]
 
 JMcomlist=[['rhodenium','JOHNMATT/RHOD'],['iridium','JOHNMATT/IRID'],['ruthenium','JOHNMATT/RUTH']]
 
-lmelist=[['cobalt','LME/PR_CO'],
+lmelist1=[['cobalt','LME/PR_CO'],
 ['molybdenum','LME/PR_MO']]
          
 lmelist2=[['zinc','LME/PR_ZI'],
