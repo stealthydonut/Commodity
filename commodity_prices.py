@@ -84,6 +84,7 @@ dfwikiraw = pd.DataFrame()
 dflmbaraw = pd.DataFrame()
 dflmbaraw1 = pd.DataFrame()
 dfJMraw = pd.DataFrame()
+dffredraw = pd.DataFrame()
 dflmeraw = pd.DataFrame()
 
 #lmd prices
@@ -123,7 +124,32 @@ for i in lmbacomlist1:
     dflmba.__delitem__('GBP AM')
     dflmba['ind']=dflmba.index
     dflmbaraw1 = dflmbaraw1.append(dflmba, ignore_index=False)
+   
 
+#Johnson Mathey 
+for i in JMcomlist:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dfjm= quandl.get(value)
+    dfjm.columns=['Hong Kong 8:30','Hong Kong 14:00','London 09:00','New York 9:30']
+    dfjm.__delitem__('Hong Kong 8:30')
+    dfjm.__delitem__('Hong Kong 14:00')
+    dfjm.__delitem__('London 09:00')
+    dfjm.columns=['price']
+    dfjm['commodity']=commodity
+    dfjm['ind']=dfjm.index
+    dfjmraw = dfjmraw.append(dfjm, ignore_index=False)
+    
+#fred
+for i in fredlist:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dffred= quandl.get(value)
+    dffred.columns=['price']
+    dffred['commodity']=commodity
+    dffred['ind']=dffred.index
+    dffredraw = dffredraw.append(dffred, ignore_index=False)
+    
 #append all the data together into one file
 
 lmba=dflmbaraw.append(dflmbaraw1, ignore_index=True)
