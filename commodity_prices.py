@@ -60,7 +60,9 @@ lmelist2=[['zinc','LME/PR_ZI'],
 ['tin','LME/PR_TN'],
 ['aluminum','LME/PR_AL'],
 ['nickel','LME/PR_NI'],
-['copper','LME/PR_CU']]
+['copper','LME/PR_CU'],
+['lead','LME/PR_PB'],
+['nasaac','LME/PR_NA']]
 
 fredlist=[['fxusdcad','FRED/DEXCAUS'],
 ['fxusdyuan','FRED/DEXCHUS'],
