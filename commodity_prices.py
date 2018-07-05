@@ -20,7 +20,7 @@ else:
 ############
 #Quandl Data
 #############
-quandl.ApiConfig.api_key = 'BVno6pBYgcEvZJ6uctTr'
+quandl.ApiConfig.api_key = 'i9XYQsbWFzKmNScabi4_'
 
 ####################################################
 #Stage 1 - Build the list that will acquire the data
