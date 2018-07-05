@@ -271,3 +271,4 @@ blob2.upload_from_filename('commodity_report.csv')
 
     
 #compriceslast.to_csv('Desktop\comm.csv')
+#bq load --autodetect --replace Stagingfiles.commodity gs://macrofiles/commodity_report.csv
