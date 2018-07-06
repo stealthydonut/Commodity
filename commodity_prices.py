@@ -119,6 +119,8 @@ for i in lmelist1:
     dflme['commodity']=commodity
     dflme['ind']=dflme.index
     dflme1raw = dflmeraw.append(dflme, ignore_index=False)
+
+    
     
 for i in lmelist2:
     commodity=''.join(i[0]) 
@@ -141,6 +143,7 @@ for i in lmelist2:
     dflme['ind']=dflme.index
     dflme2raw = dflme2raw.append(dflme, ignore_index=False)
 
+    
 #Wiki prices
 for i in wikicomlist:
     commodity=''.join(i[0]) 
@@ -151,6 +154,7 @@ for i in wikicomlist:
     dfwiki['ind']=dfwiki.index
     dfwikiraw = dfwikiraw.append(dfwiki, ignore_index=False)
 
+    
 #lmba prices    
 for i in lmbacomlist:
     commodity=''.join(i[0]) 
@@ -166,6 +170,8 @@ for i in lmbacomlist:
     dflmba['ind']=dflmba.index
     dflmbaraw = dflmbaraw.append(dflmba, ignore_index=False)
 
+    
+    
 for i in lmbacomlist1:
     commodity=''.join(i[0]) 
     value=''.join(i[1]) 
@@ -191,6 +197,7 @@ for i in JMcomlist:
     dfjm['commodity']=commodity
     dfjm['ind']=dfjm.index
     dfjmraw = dfjmraw.append(dfjm, ignore_index=False)
+    
     
 #fred
 for i in fredlist:
