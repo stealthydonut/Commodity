@@ -43,7 +43,6 @@ wikicomlist=[['rice','COM/RICE_2'],
 ['chicken','COM/WLD_CHICKEN'],
 ['orange','COM/WLD_ORANGE'],
 ['wheat','COM/WLD_WHEAT_US_SRW'],
-['soybeanns','COM/WLD_SOYBEANS'],
 ['natural gas','COM/WLD_NGAS_US'],
 ['oil','COM/WLD_CRUDE_BRENT']]
 
@@ -75,8 +74,8 @@ fredlist=[['fxusdcad','FRED/DEXCAUS'],
 ['fxusdche','FRED/DEXSZUS'],
 ['fxusdeur','FED/RXI_US_N_B_EU']]
 
-corn = quandl.get ("TFGRAIN/CORN") #corn
-soybean = quandl.get ("TFGRAIN/SOYBEANS") #soybean
+tfgrains=[['corn','TFGRAIN/CORN'],['soybean','TFGRAIN/SOYBEANS']]
+
 oil = quandl.get("OPEC/ORB")
 
 ############################################################
@@ -91,6 +90,19 @@ dffredraw = pd.DataFrame()
 dflmeraw = pd.DataFrame()
 dflme1raw = pd.DataFrame() 
 dflme2raw = pd.DataFrame()
+dftraw = pd.DataFrame()
+
+#tf
+for i in tfgrains:
+    commodity=''.join(i[0]) 
+    value=''.join(i[1]) 
+    dft= quandl.get(value)
+    dft.columns=['Cash Price','Basis','Fall Price','Fall Basis']
+    dft.columns=['price']
+    dft['commodity']=commodity
+    dft['ind']=dffred.index
+    dftraw = dftraw.append(dft, ignore_index=False)
+
 
 #lme prices
 for i in lmelist1:
@@ -197,7 +209,8 @@ file1=lmba.append(dffredraw, ignore_index=True)
 file2=file1.append(dfjmraw, ignore_index=True)
 file3=file2.append(dflme1raw, ignore_index=True)
 file4=file3.append(dflme2raw, ignore_index=True)
-commodityraw=file4.append(dfwikiraw, ignore_index=True)
+file5=file4.append(dftraw, ignore_index=True)
+commodityraw=file5.append(dfwikiraw, ignore_index=True)
 
 
 #########################################################################
