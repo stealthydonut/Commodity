@@ -276,6 +276,7 @@ for i in dflist:
     #All commodity prices
     #comprices = comprices.append(df, ignore_index=False)
     compriceslast = compriceslast.append(lastrow, ignore_index=False)
+    dft['ind']=dft.index
  
   
  
