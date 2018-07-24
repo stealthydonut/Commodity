@@ -1,5 +1,6 @@
 #This file will display commodity prices in a graphical or tabular form in google data studio
 
+quandl.ApiConfig.api_key = 'i9XYQsbWFzKmNScabi4_'
 import quandl
 import urllib
 import pandas as pd
@@ -17,10 +18,7 @@ if sys.version_info[0] < 3:
 else:
     from io import StringIO as stio
     
-############
-#Quandl Data
-#############
-quandl.ApiConfig.api_key = 'i9XYQsbWFzKmNScabi4_'
+
 
 ####################################################
 #Stage 1 - Build the list that will acquire the data
@@ -32,7 +30,7 @@ wikicomlist=[['rice','COM/RICE_2'],
 ['cocoa','COM/COCOA'],
 ['hogs iowa','COM/HOGS'],
 ['us fed funds rate','COM/FEDFU'],
-['copper commex','COM/COPPER'],
+['copper commex','COM/COPPER'], #this exist
 ['aluminum','COM/AL_LME'],
 ['fertilizers index','COM/WLD_IFERTILIZERS'],
 ['iron ore','COM/WLD_IRON_ORE'],
@@ -44,7 +42,7 @@ wikicomlist=[['rice','COM/RICE_2'],
 ['orange','COM/WLD_ORANGE'],
 ['wheat','COM/WLD_WHEAT_US_SRW'],
 ['natural gas','COM/WLD_NGAS_US'],
-['oil','COM/WLD_CRUDE_BRENT']]
+['oil','COM/WLD_CRUDE_BRENT']] #this exist
 
 lmbacomlist=[['platinum','LPPM/PLAT'],['gold','LBMA/GOLD'],['paladium','LPPM/PALL']]
 
@@ -98,9 +96,12 @@ for i in tfgrains:
     value=''.join(i[1]) 
     dft= quandl.get(value)
     dft.columns=['Cash Price','Basis','Fall Price','Fall Basis']
+    dft.__delitem__('Basis')
+    dft.__delitem__('Fall Price')
+    dft.__delitem__('Fall Basis')
     dft.columns=['price']
     dft['commodity']=commodity
-    dft['ind']=dffred.index
+    dft['ind']=dft.index
     dftraw = dftraw.append(dft, ignore_index=False)
 
 
