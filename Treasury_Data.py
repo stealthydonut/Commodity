@@ -2,33 +2,17 @@
 #requirs CUSIP, and ISSUE Date
 #list of all identifiers for CUSIP https://www.treasurydirect.gov/instit/auctfund/work/auctime/auctime_securitiestable.htm
 #the date is the issue date of the cusip number
-
+import pandas as pd
 from pytreasurydirect import TreasuryDirect
 
 td = TreasuryDirect()
-cusip = '912796CJ6'
 
-print(td.security_info(cusip, '02/11/2014'))
-# or 
-print(td.security_info(cusip, datetime.date(2014, 2, 11)))
+cusip_list = [['912796PY9','08/09/2018'],['912796PY9','06/07/2018']]
 
-from pytreasurydirect import TreasuryDirect
-
-td = TreasuryDirect()
-cusip = '912796CJ6'
-2018-08-09
-
-cusip='912796QW2'
-test=(td.security_info(cusip, '08/09/2018'))
-
-for i in dateval:
-    test=(td.security_info(cusip, '08/14/2018'))
-
-912796QV4
-#Make a dictionary file#
-
-for i in dateval:
-    test=(td.security_info(cusip, '02/11/2014'))
+for i in cusip_list:
+    cusip =''.join(i[0]) 
+    issuedate =''.join(i[1])
+    cusip_value=(td.security_info(cusip, issuedate))
+    pd.DataFrame(cusip_value.items())
+    df = pd.DataFrame(cusip_value, index=['a'])   
 #
-pd.DataFrame(test.items())
-df = pd.DataFrame(test, index=['a'])
