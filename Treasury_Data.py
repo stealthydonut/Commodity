@@ -2,6 +2,8 @@
 #requirs CUSIP, and ISSUE Date
 #list of all identifiers for CUSIP https://www.treasurydirect.gov/instit/auctfund/work/auctime/auctime_securitiestable.htm
 #the date is the issue date of the cusip number
+#for a list of cusips and issue dates https://www.treasurydirect.gov/govt/reports/pd/mspd/2010/2010_jan.htm - this can be downloaded
+#in excel form
 import pandas as pd
 from pytreasurydirect import TreasuryDirect
 
