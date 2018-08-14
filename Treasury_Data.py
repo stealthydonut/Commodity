@@ -9,18 +9,15 @@ import pandas as pd
 from pytreasurydirect import TreasuryDirect
 
 td = TreasuryDirect()
+tdraw = pd.DataFrame()
 
 cusip_list = [['912796PY9','08/09/2018'],['912796PY9','06/07/2018']]
+
+#Build a dataframe that contains all of the treasury cusip numbers
 
 for i in cusip_list:
     cusip =''.join(i[0]) 
     issuedate =''.join(i[1])
     cusip_value=(td.security_info(cusip, issuedate))
-    cusip_value = [str(r) for r in cusip_value]
-    cusip_value=['curr_outstanding']=pd.to_numeric(cusip_value=['currentlyOutstanding'], errors='coerce')
-    cusip_value['issue_date']=pd.to_datetime(data2['issuedate'], errors='coerce')
-    df=
-    #pd.DataFrame(cusip_value.items())
     df = pd.DataFrame(cusip_value, index=['a']) 
-    td = td.append(df, ignore_index=False)
-
+    tdraw = tdraw.append(df, ignore_index=False)
