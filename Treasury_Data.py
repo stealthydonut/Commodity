@@ -11,7 +11,18 @@ from pytreasurydirect import TreasuryDirect
 td = TreasuryDirect()
 tdraw = pd.DataFrame()
 
-cusip_list = [['912796PY9','08/09/2018'],['912796PY9','06/07/2018']]
+cusip_list=[['912796PS2','02/01/2018'],
+['912796PS2','05/03/2018'],
+['912796PS2','07/05/2018'],
+['912796PU7','02/08/2018'],
+['912796PU7','05/10/2018'],
+['912796PU7','07/12/2018'],
+['912796NQ8','08/17/2017'],
+['912796NQ8','02/15/2018'],
+['912796NQ8','05/17/2018'],
+['912796NQ8','07/19/2018'],
+['912796PV5','02/22/2018'],
+['912796PV5','05/24/2018']]
 
 #Build a dataframe that contains all of the treasury cusip numbers
 
