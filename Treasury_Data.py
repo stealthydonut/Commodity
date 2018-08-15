@@ -60,7 +60,7 @@ inMemoryFile.seek(0)
 #Note - anytime you read from a buffer you need to seek so it starts at the beginning
 #The low memory false exists because there was a lot of data
 df=pd.read_csv(inMemoryFile, low_memory=False)
-
+#Generate the cusip list
 df['d']=df['Date'].str[:2]
 df['m']=df['Date'].str[3:5]
 df['y']=df['Date'].str[6:]
@@ -72,5 +72,32 @@ df["day"] = df["d"].map(str) + df["/"]
 df["month"] = df["m"].map(str) + df["/"]
 df['daymonth'] = df['day'].map(str) + df['month']
 df['cusipdate'] = df['daymonth'].map(str) + df['year']
-df['cusipdate']=
+df.__delitem__('d')
+df.__delitem__('m')
+df.__delitem__('y')
+df.__delitem__('y2')
+df.__delitem__('y3')
+df.__delitem__('/')
+df.__delitem__('month')
+df.__delitem__('day')
+df.__delitem__('Date')
+df.__delitem__('year')
+df.__delitem__('daymonth')
+df2=df[df['cusipdate'].notnull()]
+df3=df2[df2['CUSIP'].notnull()]
+df_date=df3['cusipdate']
+df_value=df3['CUSIP']
+dfdatelist=df_date.values.T.tolist()
+dfvaluelist=df_value.values.T.tolist()  
 
+#Build a dataframe that contains all of the treasury cusip numbers
+
+for i in dfvaluelist:
+    cusip =''.join(i)
+    for it in dfdatelist:
+        issuedate =''.join(i)
+        #print cusip
+        print issuedate
+    cusip_value=(td.security_info(cusip, issuedate))
+    df = pd.DataFrame(cusip_value, index=['a']) 
+    tdraw = tdraw.append(df, ignore_index=False)
