@@ -60,8 +60,13 @@ inMemoryFile.seek(0)
 #Note - anytime you read from a buffer you need to seek so it starts at the beginning
 #The low memory false exists because there was a lot of data
 df=pd.read_csv(inMemoryFile, low_memory=False)
+df.drop_duplicates(subset=['cusipnum','cusipissuedate'], keep=False)
 df['cudt'] =  pd.to_datetime(df['cusipissuedate'])
-df['cup_dt'] = df['cudt'].dt.strftime("%x")
+df['day'] = df['cudt'].dt.strftime("%d")
+df['month'] = df['cudt'].dt.strftime("%m")
+df['year'] = df['cudt'].dt.strftime("%Y")
+df['/']='/'
+df['cup_dt']=df['day']+df['/']+df['month']+df['/']+df['year']
 dfdate=df['cup_dt']
 df_date = [str(r) for r in dfdate]
 dfvalue=df['cusipnum']
@@ -72,9 +77,11 @@ dflist=zip(df_value,df_date)
 for i in dflist:
     cusip =''.join(i[0]) 
     issuedate =''.join(i[1])
+    print cusip
+    print issuedate
     cusip_value=(td.security_info(cusip, issuedate))
-    df = pd.DataFrame(cusip_value, index=['a']) 
-    tdraw = tdraw.append(df, ignore_index=False)
+    dfraw = pd.DataFrame(cusip_value, index=['a']) 
+    tdraw = tdraw.append(dfraw, ignore_index=False)
 
 
 
