@@ -89,15 +89,14 @@ df_date=df3['cusipdate']
 df_value=df3['CUSIP']
 dfdatelist=df_date.values.T.tolist()
 dfvaluelist=df_value.values.T.tolist()  
+#merge the list so that the value from list 1 is in first position and value from list 2 is in second position
+dfcusipdatelist=zip(dfdatelist, dfvaluelist)
 
 #Build a dataframe that contains all of the treasury cusip numbers
 
-for i in dfvaluelist:
-    cusip =''.join(i)
-    for it in dfdatelist:
-        issuedate =''.join(i)
-        #print cusip
-        print issuedate
+for i in dfcusipdatelist:
+    cusip =''.join(i[0]) 
+    issuedate =''.join(i[1])
     cusip_value=(td.security_info(cusip, issuedate))
     df = pd.DataFrame(cusip_value, index=['a']) 
     tdraw = tdraw.append(df, ignore_index=False)
