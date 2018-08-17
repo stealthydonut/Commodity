@@ -66,10 +66,18 @@ dfdate=df['cup_dt']
 df_date = [str(r) for r in dfdate]
 dfvalue=df['cusipnum']
 df_value = [str(r) for r in dfvalue]
-dfdatelist=df_date.values.T.tolist()
-dfvaluelist=df_value.values.T.tolist()  
 #merge the list so that the value from list 1 is in first position and value from list 2 is in second position
-dflist=zip(dfdatelist, dfvaluelist)
+dflist=zip(df_value,df_date)
+
+for i in dflist:
+    cusip =''.join(i[0]) 
+    issuedate =''.join(i[1])
+    cusip_value=(td.security_info(cusip, issuedate))
+    df = pd.DataFrame(cusip_value, index=['a']) 
+    tdraw = tdraw.append(df, ignore_index=False)
+
+
+
 
 
 df['good']=df['cusipissuedate'].str[:6]
