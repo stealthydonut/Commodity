@@ -60,6 +60,22 @@ inMemoryFile.seek(0)
 #Note - anytime you read from a buffer you need to seek so it starts at the beginning
 #The low memory false exists because there was a lot of data
 df=pd.read_csv(inMemoryFile, low_memory=False)
+df['cudt'] =  pd.to_datetime(df['cusipissuedate'])
+df['cup_dt'] = df['cudt'].dt.strftime("%x")
+dfdate=df['cup_dt']
+df_date = [str(r) for r in dfdate]
+dfvalue=df['cusipnum']
+df_value = [str(r) for r in dfvalue]
+dfdatelist=df_date.values.T.tolist()
+dfvaluelist=df_value.values.T.tolist()  
+#merge the list so that the value from list 1 is in first position and value from list 2 is in second position
+dflist=zip(dfdatelist, dfvaluelist)
+
+
+df['good']=df['cusipissuedate'].str[:6]
+df['char2']=df['cusipissuedate'].str[2:]
+
+
 #Generate the cusip list
 df['d']=df['cusipissuedate'].str[:2]
 df['m']=df['cusipissuedate'].str[3:5]
