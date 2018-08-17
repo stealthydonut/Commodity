@@ -7,33 +7,6 @@
 import pandas as pd
 import pandas as pd
 from pytreasurydirect import TreasuryDirect
-
-td = TreasuryDirect()
-tdraw = pd.DataFrame()
-
-cusip_list=[['912796PS2','02/01/2018'],
-['912796PS2','05/03/2018'],
-['912796PS2','07/05/2018'],
-['912796PU7','02/08/2018'],
-['912796PU7','05/10/2018'],
-['912796PU7','07/12/2018'],
-['912796NQ8','08/17/2017'],
-['912796NQ8','02/15/2018'],
-['912796NQ8','05/17/2018'],
-['912796NQ8','07/19/2018'],
-['912796PV5','02/22/2018'],
-['912796PV5','05/24/2018']]
-
-#Build a dataframe that contains all of the treasury cusip numbers
-
-for i in cusip_list:
-    cusip =''.join(i[0]) 
-    issuedate =''.join(i[1])
-    cusip_value=(td.security_info(cusip, issuedate))
-    df = pd.DataFrame(cusip_value, index=['a']) 
-    tdraw = tdraw.append(df, ignore_index=False)
-
-    
 import urllib
 import pandas as pd
 import numpy as np
@@ -45,6 +18,9 @@ if sys.version_info[0] < 3:
 else:
     from io import StringIO as stio
 
+td = TreasuryDirect()
+tdraw = pd.DataFrame()    
+    
 #Get the data from google cloud storage
 from google.cloud import storage
 client = storage.Client()
@@ -86,48 +62,3 @@ for i in dflist:
 
 
 
-
-df['good']=df['cusipissuedate'].str[:6]
-df['char2']=df['cusipissuedate'].str[2:]
-
-
-#Generate the cusip list
-df['d']=df['cusipissuedate'].str[:2]
-df['m']=df['cusipissuedate'].str[3:5]
-df['y']=df['cusipissuedate'].str[6:]
-df['y2'] = df['y'].astype(str).convert_objects(convert_numeric=True)
-df['y3'] = np.where(df['y2']>20, '19', '20')
-df["year"] = df["y3"].map(str) + df["y"]
-df['/']='/'
-df["day"] = df["d"].map(str) + df["/"]
-df["month"] = df["m"].map(str) + df["/"]
-df['daymonth'] = df['day'].map(str) + df['month']
-df['cusipdate'] = df['daymonth'].map(str) + df['year']
-df.__delitem__('d')
-df.__delitem__('m')
-df.__delitem__('y')
-df.__delitem__('y2')
-df.__delitem__('y3')
-df.__delitem__('/')
-df.__delitem__('month')
-df.__delitem__('day')
-df.__delitem__('Date')
-df.__delitem__('year')
-df.__delitem__('daymonth')
-df2=df[df['cusipdate'].notnull()]
-df3=df2[df2['CUSIP'].notnull()]
-df_date=df3['cusipdate']
-df_value=df3['CUSIP']
-dfdatelist=df_date.values.T.tolist()
-dfvaluelist=df_value.values.T.tolist()  
-#merge the list so that the value from list 1 is in first position and value from list 2 is in second position
-dfcusipdatelist=zip(dfdatelist, dfvaluelist)
-
-#Build a dataframe that contains all of the treasury cusip numbers
-
-for i in dfcusipdatelist:
-    cusip =''.join(i[0]) 
-    issuedate =''.join(i[1])
-    cusip_value=(td.security_info(cusip, issuedate))
-    df = pd.DataFrame(cusip_value, index=['a']) 
-    tdraw = tdraw.append(df, ignore_index=False)
