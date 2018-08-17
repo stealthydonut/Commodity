@@ -53,11 +53,13 @@ dflist=zip(df_value,df_date)
 for i in dflist:
     cusip =''.join(i[0]) 
     issuedate =''.join(i[1])
-    print cusip
-    print issuedate
-    cusip_value=(td.security_info(cusip, issuedate))
-    dfraw = pd.DataFrame(cusip_value, index=['a']) 
-    tdraw = tdraw.append(dfraw, ignore_index=False)
+    try:
+        cusip_value=(td.security_info(cusip, issuedate))
+        dfraw = pd.DataFrame(cusip_value, index=['a']) 
+        tdraw = tdraw.append(dfraw, ignore_index=False)
+    except:
+        print cusip
+        print issuedate
 
 
 
