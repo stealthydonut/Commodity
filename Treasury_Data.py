@@ -61,9 +61,9 @@ inMemoryFile.seek(0)
 #The low memory false exists because there was a lot of data
 df=pd.read_csv(inMemoryFile, low_memory=False)
 #Generate the cusip list
-df['d']=df['Date'].str[:2]
-df['m']=df['Date'].str[3:5]
-df['y']=df['Date'].str[6:]
+df['d']=df['cusipissuedate'].str[:2]
+df['m']=df['cusipissuedate'].str[3:5]
+df['y']=df['cusipissuedate'].str[6:]
 df['y2'] = df['y'].astype(str).convert_objects(convert_numeric=True)
 df['y3'] = np.where(df['y2']>20, '19', '20')
 df["year"] = df["y3"].map(str) + df["y"]
