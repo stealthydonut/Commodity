@@ -3,6 +3,8 @@
 #list of all identifiers for CUSIP https://www.treasurydirect.gov/instit/auctfund/work/auctime/auctime_securitiestable.htm
 #the date is the issue date of the cusip number
 #for a list of cusips and issue dates https://www.treasurydirect.gov/govt/reports/pd/mspd/2010/2010_jan.htm - this can be downloaded
+#all of the cusips by year https://www.treasurydirect.gov/instit/annceresult/auctdata/auctdata_stat.htm
+#https://www.treasurydirect.gov/instit/annceresult/press/preanre/preanre.htm -2018 cusips
 #in excel form
 import pandas as pd
 import pandas as pd
